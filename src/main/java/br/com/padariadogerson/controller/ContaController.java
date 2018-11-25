@@ -1,6 +1,9 @@
 package br.com.padariadogerson.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +12,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,6 +57,7 @@ public class ContaController {
 	 * @param resultadoValidacao  é o retorno com as mensagens de erro das validação de dentro do DTO
 	 * @return
 	 */
+	@CrossOrigin(origins = "*")
 	@PostMapping  (value = "/contas")
 	public ResponseEntity<Response<ContaDTO>> cadastrarConta(@Valid @RequestBody ContaDTO contaDto, BindingResult resultadoValidacao)	{
 		
@@ -61,6 +66,20 @@ public class ContaController {
 		List<String> erros = new ArrayList<String>();
 		Conta newConta = new Conta();
 		newConta.setTitulo(contaDto.getTitulo());
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		if(contaDto.getDataPagamento()!=null) {
+			Date dataFormatada;
+			try {
+				dataFormatada = dateFormat.parse(contaDto.getDataPagamento().toString());
+				newConta.setDataPagamento(dataFormatada); 
+			} catch (ParseException e) {
+				//TODO -tratar erro convenientemente;
+				e.printStackTrace();
+			}
+			
+		}
+		
 		newConta.setDataPagamento(contaDto.getDataPagamento());
 		newConta.setStatus(contaDto.getStatus());
 		newConta.setValor(contaDto.getValor());
@@ -97,6 +116,7 @@ public class ContaController {
 		
 	}
 	
+	@CrossOrigin(origins = "*")
 	@PutMapping  (value = "/contas/{id}")
 	public ResponseEntity<Response<ContaDTO>> atualizarConta(@Valid @RequestBody ContaDTO contaDto, @PathVariable("id") Integer id, BindingResult resultadoValidacao)	{
 		
@@ -116,7 +136,11 @@ public class ContaController {
 			
 			//se não tem erro, chama o serviço e grava na base de dados
 			Optional<Conta> contaCadastrada = contaService.consultarContaPorId(id);
-			contaCadastrada.get().setDataPagamento(contaDto.getDataPagamento()); 
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			if(contaDto.getDataPagamento()!=null) {
+				Date dataFormatada = dateFormat.parse(contaDto.getDataPagamento().toString());
+				contaCadastrada.get().setDataPagamento(dataFormatada); 
+			}
 			contaCadastrada.get().setPadaria(contaDto.getPadaria());
 			contaCadastrada.get().setStatus(contaDto.getStatus());
 			contaCadastrada.get().setTitulo(contaDto.getStatus());
@@ -175,6 +199,7 @@ public class ContaController {
 	 * @param id
 	 * @return
 	 */
+	@CrossOrigin(origins = "*")
 	@GetMapping (value = "/contas/{id}")
 	public ResponseEntity retornarConta( @RequestBody @PathVariable("id") Integer id)	{
 		
@@ -212,6 +237,7 @@ public class ContaController {
 	 * Retorna Conta
 	 * @return
 	 */
+	@CrossOrigin(origins = "*")
 	@GetMapping (value = "/contas")
 	public ResponseEntity retornarContas( )	{
 		

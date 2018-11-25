@@ -89,14 +89,14 @@ public class Conta  implements Serializable{
 		this.status = status;
 	}
 	
-	@OneToMany(mappedBy="conta")
+	/*@OneToMany(mappedBy="conta",fetch = FetchType.LAZY)
 	public List<Historico> getHistoricoCollection() {
 		return historicoCollection;
 	}
 
 	public void setHistoricoCollection(List<Historico> historicoCollection) {
 		this.historicoCollection = historicoCollection;
-	}
+	}*/
 
 	@Override
 	public int hashCode() {

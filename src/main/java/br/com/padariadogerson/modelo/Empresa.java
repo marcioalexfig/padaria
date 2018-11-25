@@ -52,13 +52,13 @@ public class Empresa implements Serializable{
 		this.id = id;
 	}
 	
-	@OneToMany(mappedBy="empresa")
+	/*@OneToMany(mappedBy="empresa",fetch = FetchType.LAZY)
 	public List<Padaria> getPadariaCollection() {
 		return padariaCollection;
 	}
 	public void setPadariaCollection(List<Padaria> padariaCollection) {
 		this.padariaCollection = padariaCollection;
-	}
+	}*/
 	@Override
 	public int hashCode() {
 		final int prime = 31;

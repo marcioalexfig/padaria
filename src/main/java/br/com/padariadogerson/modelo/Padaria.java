@@ -43,13 +43,13 @@ public class Padaria  implements Serializable{
 		this.nome = nome;
 	}
 	
-	@OneToMany(mappedBy="padaria")
+	/*@OneToMany(mappedBy="padaria",fetch = FetchType.LAZY)
 	public List<Conta> getContaCollection() {
 		return contaCollection;
 	}
 	public void setContaCollection(List<Conta> contaCollection) {
 		this.contaCollection = contaCollection;
-	}
+	}*/
 	@Id
 	@GeneratedValue (strategy=GenerationType.AUTO)
 	public Integer getId() {
@@ -65,7 +65,7 @@ public class Padaria  implements Serializable{
 		this.saldo = saldo;
 	}
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	public Empresa getEmpresa() {
 		return empresa;
